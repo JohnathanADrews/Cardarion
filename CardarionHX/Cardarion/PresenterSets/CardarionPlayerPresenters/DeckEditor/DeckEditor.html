@@ -1,0 +1,181 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-publisher="Save" />
+<hx h-publisher="Cancel" />
+
+<hx h-proxy="setMenu" />
+<hx h-proxy="setDeck" />
+
+<div class="topLine">
+    <div class="headerContainer">
+        <hx h-presenter="cardarion.control/TextBox" h-handle="nameText" />
+        <div class="endBlock"></div>
+    </div>
+    <div class="deckInfo">
+        <div><label>Deck Size:</label></div>
+        <div class="deckSize"><label h-handle="sizeCount">0</label></div>
+        <div class="deckRules"><label>Min: 40 / Max: 100 </label></div>
+    </div>
+</div>
+
+<div class="mainView">
+    <div class="cardLibraryContainer">
+        <hx h-presenter="cardarion.presenter/CardLibrary" h-handle="cardLibrary" />
+    </div>
+    <div class="decklistContainer">
+        <hx h-presenter="cardarion.presenter/DeckList" h-handle="deckList" />
+    </div>
+</div>
+
+
+<script>
+
+    function DeckEditor() {
+        this.deck = null;
+    }
+
+    DeckEditor.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("DeckEditor.start - ",  t);
+
+            t.cardLibrary.proxy.setPage({
+                cards: [
+                    {name: "Card1 very long name"},{name: "Card2"},{name: "Card3"},
+                    {name: "Card4"},{name: "Card5"},{name: "Card6"},
+                    {name: "Card7"},{name: "Card8"},{name: "Card9"},
+                    {name: "Card10"},{name: "Card11"},{name: "Card12"},
+                    {name: "Card13"},{name: "Card14"},{name: "Card15"},
+                    {name: "Card16"},{name: "Card17"},{name: "Card18"},
+                ]
+            });
+
+            t.cardLibrary.publisher.CardClicked.subscribe((o, card) => {
+                t.deckList.proxy.addCard(card.proxy.getCardObject());
+            });
+
+            t.deckList.publisher.CountChanged.subscribe((o, value) => {
+                t.sizeCount.html(value.count);
+            });
+
+        },
+
+        setMenu: function (menu) {
+            var t = this;
+
+            menu.proxy.clearCenter();
+            var save = { name: "Save" };
+            var cancel = { name: "Discard Changes" };
+
+            menu.proxy.addCenterItem(save);
+            menu.proxy.addCenterItem(cancel);
+
+            menu.publisher.ItemSelected.subscribe((o, item) => {
+                if (item == save) {
+                    t.hularion.publisher.Save.publish();
+                }
+                if (item == cancel) {
+                    t.hularion.publisher.Cancel.publish();
+                }
+            });
+        },
+
+        setDeck: function (deck) {
+            var t = this;
+            t.deck = deck;
+
+            t.nameText.proxy.setText(deck.name);
+            //console.log("DeckEditor.setDeck - ", deck, t);
+            t.deckList.proxy.setList(deck.cards);
+        }
+
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+    .topLine{
+        width:100%;
+        display:inline-block;
+    }
+    .topLine > *{
+        float:left;
+    }
+
+    .deckInfo {
+        margin-left: 20px;
+        font-size: 30px;
+        display: inline-block;
+    }
+    .deckInfo > * {
+        float: left;
+    }
+    .deckSize{
+        margin-left:10px;
+    }
+    .deckRules {
+        margin-left: 30px;
+    }
+
+    .headerContainer {
+        width: calc(100% - 550px);
+        margin-left: 50px;
+        font-size: 30px;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .headerContainer > *{
+        width:100%;
+        float:left;
+    }
+        .headerContainer input {
+            font-size: 30px;
+            margin:-3px;
+            margin-right:-100px;
+        }
+
+    .endBlock {
+        height: 34px;
+        width: 10px;
+        margin-left: -10px;
+        background-color: rgb(70,70,70);
+    }
+
+    .mainView {
+        width: 100%;
+        display: inline-block;
+    }
+    .mainView > *{
+        float:left;
+    }
+
+    .cardLibraryContainer{
+        width:calc(100% - 500px);
+        height:100%;
+        border:solid 1px white;
+        margin-right:20px;        
+    }
+
+    .decklistContainer {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+

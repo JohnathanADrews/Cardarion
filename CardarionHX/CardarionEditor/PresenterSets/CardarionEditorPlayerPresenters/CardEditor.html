@@ -1,0 +1,120 @@
+﻿
+
+<hx h-publisher="Save"/>
+<hx h-publisher="EditPreview"/>
+<hx h-publisher="Reset"/>
+
+<hx h-proxy="setCard" />
+<hx h-proxy="getCard" />
+
+<div class="menu">
+    <div class="button" h-handle="saveButton"><label>Save</label></div>
+    <div class="button" h-handle="resetButton"><label>Reset</label></div>
+</div>
+<div class="editContainer">
+    <div class="editNameContainer">
+        <label>Name:</label>
+        <hx h-presenter="cardarion.control/TextBox" h-handle="nameText" />
+    </div>
+</div>
+
+<script>
+
+    function CardEditor() {
+        this.card = null;
+    }
+
+    CardEditor.prototype = {
+
+        start: function () {
+            var t = this;
+
+            console.log("CardEditor.start - ", t);
+
+            t.nameText.publisher.KeyUp.subscribe((o, event)=>{
+                t.hularion.publisher.EditPreview.publish(t.getPreview());
+            });
+
+            t.saveButton.on("click", () => {
+                t.save();
+                t.hularion.publisher.Save.publish();
+            });
+            t.resetButton.on("click", ()=>{
+                t.setCard(t.card); 
+                t.hularion.publisher.Reset.publish();
+            });
+
+        },
+
+        setCard: function(card){
+            var t = this;
+            t.card = card;
+            var cardObject = card.proxy.getCardObject();
+            console.log("CardEditor.setCard - ", card, cardObject);
+            t.nameText.proxy.setText(cardObject.name);
+        },
+
+        getCard: function () {
+            return this.card;
+        },
+
+        save: function(){
+            var t = this;
+            t.card.name = t.nameText.proxy.getText();
+        },
+
+        reset: function(){
+            var t = this;
+            t.setCard(t.card);
+        },
+
+        getPreview: function(){
+            var t = this;
+            var preview = {};
+            preview.name = t.nameText.proxy.getEditText();
+            return preview;
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        font-size:16px;
+    }
+        .this input {
+            font-size: 16px;
+        }
+
+
+    .menu{
+        display:inline-block;
+    }
+    .menu > * {
+        float:left;
+    }
+    .button{
+        margin:20px;
+        border:solid 1px white;
+        border-radius:5px;
+        padding:5px;
+        cursor:pointer;
+    }
+    .button *{
+        cursor:pointer;
+    }
+    .editContainer{
+        margin:10px;
+    }
+
+    .editNameContainer{
+        display:inline-block;
+    }
+    .editNameContainer > *{
+        float:left;
+        margin-right:10px;
+    }
+
+</style>
+
+

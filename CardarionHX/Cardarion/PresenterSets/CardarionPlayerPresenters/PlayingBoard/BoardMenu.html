@@ -1,0 +1,42 @@
+﻿
+
+<hx h-proxy="setSize"/>
+
+<script>
+
+    function BoardMenu() {
+        this.coordinates = null;
+    }
+
+    BoardMenu.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("BoardMenu.start - ", parameters, t);
+
+
+        },
+
+        setSize: function (size) {
+            var t = this;
+            t.hularion.principal.width(size);
+            t.hularion.principal.height(size);
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        overflow: hidden;
+    }
+    .this:hover{
+        background-color:aliceblue;
+    }
+    .this > *{
+    }
+</style>
+
+

@@ -1,0 +1,142 @@
+﻿
+<hx h-publisher="Clicked"/>
+<hx h-publisher="Removed"/>
+<hx h-publisher="CountChanged"/>
+<hx h-proxy="setItem" />
+<hx h-proxy="getItem" />
+
+<div class="itemContainer" h-handle="container">
+    <div class="countContainer"><label h-handle="cardCount"></label></div>
+    <div class="nameContainer"><label h-handle="cardName"></label></div>
+    <div class="itemButton plusButton" h-handle="plusButton" title="Add another copy of this card."><label h-handle="addCard" >+</label></div>
+    <div class="itemButton minusButton" h-handle="minusButton" title="Remove a copy of this card."><label h-handle="subtractCard" title="Remove a copy of this card.">-</label></div>
+    <div class="itemButton removeButton" h-handle="removeButton" title="Remove all copies of this card."><label h-handle="removeCard" >x</label></div>
+</div>
+
+
+<script>
+
+    function DeckListItem() {
+        this.item = null;
+    }
+
+    DeckListItem.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("DeckListItem.start - ", parameters, t);
+
+
+
+            t.hularion.principal.on("click", ()=>{
+                t.hularion.publisher.Clicked.publish(t.hularion.proxy);
+            });
+            t.plusButton.on("click", ()=>{
+                t.item.count++;
+                t.cardCount.html(t.item.count);
+                t.hularion.publisher.CountChanged.publish(t.item);
+            });
+            t.minusButton.on("click", ()=>{
+                t.item.count--;
+                if (t.item.count < 0) {
+                    t.item.count = 0;
+                }
+                t.cardCount.html(t.item.count);
+                t.hularion.publisher.CountChanged.publish(t.item);
+            });
+            t.removeButton.on("click", ()=>{
+                t.hularion.publisher.Removed.publish(t.item);
+                t.hularion.publisher.CountChanged.publish(t.item);
+                t.hularion.principal.remove();
+            });
+        },
+
+        setItem: function(item){
+            var t = this;
+            t.item = item;
+            if(item.count == null || item.count < 0){
+                item.count = 0;
+            }
+            t.cardName.html(item.name);
+            t.cardCount.html(item.count);
+        },
+
+        getItem: function () {
+            return this.item;
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        background: linear-gradient(0deg, black 4%, rgb(50,50,50) 4%, rgb(120,120,120) 96%, black 96%);
+        width: 400px;
+        height: 32px;
+        overflow: hidden;
+        cursor:pointer;
+    }
+    .this * {
+        cursor: pointer;
+    }
+    .itemContainer{
+        display:inline-block;
+        height:inherit;
+        margin-top:5px;
+        margin-left:10px;
+    }
+    .itemContainer > *{
+        float:left;
+        height: inherit;
+    }
+
+    .nameContainer{
+        width:255px;
+    }
+
+    .countContainer{
+        width:40px;
+    }
+
+    .itemButton {
+        width: 20px;
+        height: 20px;
+        border: solid 1px darkgray;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+    }
+    .itemButton > * {
+        float: left;
+    }
+    .itemButton *{
+        cursor:pointer;
+    }
+    .plusButton {
+        margin-right: 10px;
+    }
+    .plusButton > * {
+        margin-left: 5px;
+        margin-top: 1px;
+    }
+    .minusButton {
+        margin-right: 10px;
+    }
+    .minusButton > *{
+        margin-left:7px;
+        margin-top:0px;
+    }
+    .removeButton > *{
+        margin-left:6px;
+        margin-top:0px;
+    }
+
+    .itemButton:hover {
+        background-color: darkgray;
+    }
+
+
+</style>
+
+

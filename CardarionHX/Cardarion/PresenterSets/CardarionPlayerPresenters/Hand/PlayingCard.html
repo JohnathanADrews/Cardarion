@@ -1,0 +1,149 @@
+﻿
+<hx h-publisher="Clicked"/>
+
+<hx h-proxy="setName" />
+<hx h-proxy="getName" />
+<hx h-proxy="getCardObject" />
+<hx h-proxy="setCardObject" />
+<hx h-proxy="clone" />
+
+<div class="cardContainer" h-handle="cardContainer">
+
+    <div class="title">
+        <label h-handle="name"></label>
+    </div>
+    <div class="sectionTwo">
+        <div class="cardTile">
+            <hx h-presenter="cardarion.presenter/CardTile" h-handle="tile" />
+        </div>
+        <div class="cardCost" h-handle="cardCost">
+
+        </div>
+    </div>
+    <div class="cardAffinities"></div>
+    <div class="cardText">
+
+    </div>
+</div>
+
+
+<script>
+
+    function PlayingCard() {
+        this.card = {};
+    }
+
+    PlayingCard.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+
+            t.hularion.principal.on("click", () => {
+                t.hularion.publisher.Clicked.publish(t.hularion.proxy);
+            });
+
+            var tileSize = 80;
+            t.tile.proxy.setSize(tileSize);
+            //t.cardCost.width(t.hularion.principal.width() - tileSize);
+            t.cardCost.width(160 - tileSize);
+            t.cardCost.height(tileSize);
+
+        },
+
+        setName: function (name) {
+            var t = this;
+            //console.log("PlayingCard.setName- ", name, t);
+            t.name.html(name);
+            t.card.name = name;
+        },
+
+        getName: function () {
+            return this.name.html();
+        },
+
+        setCardObject: function (card) {
+            var t = this;
+            t.card = card;
+            t.name.html(card.name);
+        },
+
+        getCardObject: function () {
+            return t.card;
+        },
+
+        clone: function () {
+            var t = this;
+            var clone = cardarion.presenter.presenters.PlayingCard.create();
+            clone.proxy.setCardObject(t.card);
+            return clone;
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        border: solid 2px black;
+        width: 160px;
+        height: 224px;
+        border-radius: 5px;
+        background: linear-gradient(135deg, rgb(200,200,200) 0%, gray 40%, rgb(200,200,200) 100%);
+        position:relative;
+        cursor: pointer;
+        overflow:hidden;
+        transform-style:preserve-3d;
+    }
+    .this *{
+        cursor:pointer;
+    }
+
+    .cardContainer {
+        display: inline-block;
+        width: 100%;
+        height: inherit;
+    }
+
+    .cardContainer > * {
+        width: 100%;
+        float:left;
+    }
+
+    .title {
+        width: calc(100% - 8px);
+        font-size: 14px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding: 4px;
+        background: linear-gradient(135deg, rgb(220,220,220) 0%, rgb(255,255,255), rgb(220,220,220) 100%);
+        color: black;
+        height:16px;
+    }
+
+    .sectionTwo{
+        display:inline-block;
+    }
+
+    .sectionTwo > *{
+        float:left;
+    }
+
+    .cardCost {
+        background: linear-gradient(0deg,  rgb(220,220,220) 2%, rgb(255,255,255) 50%, rgb(220,220,220) 98%);
+        height: 100%;
+    }
+
+    .cardText {
+        height: 96px;
+        background: linear-gradient(0deg, rgb(220,220,220) 2%, rgb(255,255,255) 50%, rgb(220,220,220) 98%);
+    }
+
+    .cardAffinities {
+        height: 24px;
+        background: linear-gradient(0deg, rgb(50,50,50) 8%, rgb(220,220,220) 8%, rgb(255,255,255) 50%, rgb(220,220,220) 92%, rgb(50,50,50) 92%);
+    }
+
+</style>
+
+

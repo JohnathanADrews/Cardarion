@@ -1,0 +1,103 @@
+﻿
+
+<div class="mainView">
+    <div class="cardLibraryContainer">
+        <hx h-presenter="cardarion.presenter/CardLibrary" h-handle="cardLibrary" />
+    </div>
+    <div class="cardEditorContainer " h-handle="editorContainer">
+    </div>
+    <div class="cardPreviewContainer">
+        <hx h-presenter="cardarion.presenter/PlayingCard" h-handle="previewCard" />
+    </div>
+</div>
+
+<script>
+
+    function CardEditManager() {
+    }
+
+    CardEditManager.prototype = {
+
+        start: function () {
+            var t = this;
+
+            console.log("CardEditManager.start - ", t);
+
+            
+            t.cardLibrary.proxy.setPage({
+                cards: [
+                    {name: "Card1 very long name2"},{name: "Card2"},{name: "Card3"},
+                    {name: "Card4"},{name: "Card5"},{name: "Card6"},
+                    {name: "Card7"},{name: "Card8"},{name: "Card9"},
+                    {name: "Card10"},{name: "Card11"},{name: "Card12"},
+                    {name: "Card13"},{name: "Card14"},{name: "Card15"},
+                    {name: "Card16"},{name: "Card17"},{name: "Card18"},
+                ]
+            });
+
+            t.cardLibrary.publisher.CardClicked.subscribe((o, card) => {
+                var editor = cardarion.editor.presenters.CardEditor.create();
+                editor.proxy.setCard(card);
+                editor.publisher.EditPreview.subscribe((o, preview) => {
+                    t.previewCard.proxy.setCardObject(preview);
+                });
+                editor.publisher.Save.subscribe(() => {
+                    card.proxy.setCardObject(editor.proxy.getCard());
+                });
+                editor.publisher.Reset.subscribe(() => {
+                    t.previewCard.proxy.setCardObject(card.proxy.getCardObject());
+                });
+                t.previewCard.proxy.setCardObject(card.proxy.getCardObject());
+                t.editorContainer.empty();
+                t.editorContainer.append(editor.view);
+            });
+
+            var scale = 1.5;
+            t.previewCard.view.css("transform", "scale("+scale+")");
+            t.previewCard.view.css("margin-left", (16)+"%");
+            t.previewCard.view.css("margin-top", (23)+"%");
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+
+    .mainView {
+        width: 100%;
+        display: inline-block;
+    }
+
+        .mainView > * {
+            float: left;
+        }
+
+    .cardLibraryContainer {
+        width: calc(100% - 620px);
+        height: 100%;
+        /*border: solid 1px white;*/
+        margin-right: 20px;
+    }
+
+    .cardEditorContainer {
+        width: 300px;
+        height: 500px;
+        border: solid 1px white;
+        margin-right: 20px;
+    }
+
+    .cardPreviewContainer {
+        width: 255px;
+        height: 500px;
+        display:inline-block;
+    }
+    .cardPreviewContainer > *{
+        float:left;
+    }
+</style>
+
+

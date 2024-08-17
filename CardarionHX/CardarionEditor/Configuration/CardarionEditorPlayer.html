@@ -1,0 +1,14 @@
+﻿
+<hx h-presenter-configuration="CardarionEditorPlayer-CardarionEditorPlayerPresenters-Config" h-presenter-set="CardarionEditorPlayerPresenters">
+
+    <hx h-import-presenter="this" h-import-set="this" h-frame="cardarion.editor"></hx>
+    <hx h-presenter-frame="cardarion.editor" h-attach="frame" h-handle="cardarion.editor"></hx>
+
+    <hx h-import-presenter="Cardarion" h-import-set="CardarionPlayerPresenters" h-frame="cardarion.presenter"></hx>
+    <hx h-presenter-frame="cardarion.presenter" h-attach="frame" h-handle="cardarion.presenter"></hx>
+
+    <hx h-import-presenter="CardarionCore" h-import-set="Control" h-frame="cardarion.control"></hx>
+    <hx h-presenter-frame="cardarion.control" h-attach="frame" h-handle="cardarion.control"></hx>
+
+
+</hx>

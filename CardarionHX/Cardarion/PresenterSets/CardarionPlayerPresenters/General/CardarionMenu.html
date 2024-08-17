@@ -1,0 +1,135 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+
+<hx h-publisher="ItemSelected" />
+<hx h-proxy="addCenterItem" /> <!--{ name: ""}-->
+<hx h-proxy="addLeftItem" /> <!--{ name: ""}-->
+<hx h-proxy="addRightItem" /> <!--{ name: ""}-->
+<hx h-proxy="clearCenter" />
+<hx h-proxy="clearLeft" />
+<hx h-proxy="clearRight" />
+
+
+<div class="leftContainer" h-handle="leftContainer"></div>
+<div class="menuContainer" h-handle="menuContainer"></div>
+<div class="rightContainer" h-handle="rightContainer"></div>
+
+
+<script>
+
+    function CardarionMenu() {
+    }
+
+    CardarionMenu.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("CardarionMenu.start - ", t);
+
+        },
+
+        createButton: function (item) {
+            var t = this;
+            var button = cardarion.presenter.presenters.CardarionBigButton.create();
+            button.proxy.setName(item.name);
+            button.publisher.Clicked.subscribe(() => {
+                t.hularion.publisher.ItemSelected.publish(item);
+            });
+            return button;
+        },
+
+        addCenterItem: function (item) {
+            var t = this;
+            var button = t.createButton(item);
+            t.menuContainer.append(button.view);
+            return button;
+        },
+
+        addLeftItem: function (item) {
+            var t = this;
+            var button = t.createButton(item);
+            t.leftContainer.append(button.view);
+            return button;
+        },
+
+        addRightItem: function (item) {
+            var t = this;
+            var button = t.createButton(item);
+            t.rightContainer.append(button.view);
+            return button;
+        },
+
+        clearCenter: function (item) {
+            this.menuContainer.empty();
+        },
+
+        clearLeft: function (item) {
+            this.leftContainer.empty();
+        },
+
+        clearRight: function (item) {
+            this.rightContainer.empty();
+        },
+    }
+
+</script>
+<style>
+
+    .this {
+        color: white;
+        background: linear-gradient(0deg, black 2%, rgb(50,50,50) 2%, rgb(70,70,70) 20%, rgb(120,120,120) 21%, rgb(70,70,70) 22%, black 50%, black 80%,rgb(50,50,50) 90%, rgb(50,50,50) 100%);
+        display: inline-block;
+        height: 150px;
+        overflow: hidden;
+    }
+
+        .this > *{
+            float:left;
+        }
+
+    .menuContainer {
+        width: calc(100% - 800px);
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .leftContainer {
+        width: 400px;
+        height: 150px;
+        display: inline-block;
+        overflow: hidden;
+    }
+        .leftContainer > *{
+            float:left;
+        }
+
+    .rightContainer {
+        width: 350px;
+        height: 150px;
+        display: inline-block;
+        overflow: hidden;
+    }
+
+        .rightContainer > * {
+            float: right;
+        }
+
+
+
+</style>
+
+

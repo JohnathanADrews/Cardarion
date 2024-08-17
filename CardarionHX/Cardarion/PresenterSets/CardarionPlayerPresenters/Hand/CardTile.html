@@ -1,0 +1,120 @@
+﻿
+
+<hx h-proxy="setSize" />
+
+<div class="container" h-handle="container">
+    <div class="top cellItem" h-handle="top">
+        <div class="vertical" h-handle="topHorizontal"></div>
+    </div>
+    <div class="left cellItem" h-handle="left">
+        <div class="vertical" h-handle="leftVertical"></div>
+    </div>
+    <div class="right cellItem" h-handle="right">
+        <div class="vertical" h-handle="rightVertical"></div>
+    </div>
+    <div class="bottom cellItem" h-handle="bottom">
+        <div class="vertical" h-handle="bottomHorizontal"></div>
+    </div>
+    <div class="center cellItem" h-handle="center">
+        <div class="centerContent" h-handle="centerContent"></div>
+    </div>
+</div>
+
+<script>
+
+    function CardTile() {
+    }
+
+    CardTile.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            t.setSize(80);
+
+        },
+
+        setSize: function (size) {
+            var t = this;
+            t.hularion.principal.width(size);
+            t.hularion.principal.height(size);
+
+            var modified = size - 2;
+            var centerOffset = 10;
+            var middle = modified - 2 * centerOffset;
+
+
+            t.container.width(modified);
+            t.container.height(modified);
+
+
+            t.top.width(modified);
+            t.top.height(modified);
+
+            t.left.width(modified);
+            t.left.height(modified);
+            t.left.css("top", (-1 * modified) + "px");
+
+            t.right.width(modified);
+            t.right.height(modified);
+            t.right.css("top", (-2 * modified) + "px");
+
+            t.bottom.width(modified);
+            t.bottom.height(modified);
+            t.bottom.css("top", (-3 * modified) + "px");
+
+            t.center.width(modified);
+            t.center.height(modified);
+            t.center.css("top", (-4 * modified) + "px");
+
+            t.centerContent.width(middle);
+            t.centerContent.height(middle);
+            t.center.css("margin-top", centerOffset + "px");
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        overflow: hidden;
+    }
+
+        .this > * {
+        }
+
+    .container { 
+        border: solid 1px lightgray;
+    }
+
+        .container > * {
+        }
+
+    .cellItem {
+        position: relative;
+    }
+
+    .corner {
+        background-color: green;
+    }
+
+    .center {
+        width: 100%;
+    }
+
+    .centerContent {
+        background-color: lightgray;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .left {
+        background: linear-gradient(45deg, transparent 0%, transparent 49.9%, lightgray 49.9%, lightgray 50.1%, transparent 50.1%, transparent 100%);
+    }
+
+    .right {
+        background: linear-gradient(135deg, transparent 0%, transparent 49.9%, lightgray 49.9%, lightgray 50.1%, transparent 50.1%, transparent 100%);
+    }
+</style>
+

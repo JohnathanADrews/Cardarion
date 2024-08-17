@@ -1,0 +1,107 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+<!--<hx h-publisher="Clicked" />
+<hx h-proxy="setHeight" />-->
+<!--<div class="playingBoard">
+
+    <div class="playingBoardMiddle">
+        <div class="playingBoardAbilities"></div>
+        <div class="playingBoardTiles"></div>
+    </div>
+
+</div>-->
+
+
+<!--<hx h-presenter="cardarion.control/DraggablePane" h-handle="draggable" />-->
+<hx h-presenter="cardarion.control/MapPane" h-handle="mapPane" />
+
+
+<script>
+
+    function PlayingBoardCopy() {
+        this.columnCount = 11;
+        this.rowCount = 11;
+        //this.columnCount = 21;
+        //this.rowCount = 21;
+        this.tileSize = 30;
+    }
+
+    PlayingBoardCopy.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("PlayingBoardCopy.start - ", parameters, t, cardarion.control);
+
+            var table = cardarion.control.presenters.Table.create();
+
+            table.proxy.setBaseColumnWidth(t.tileSize);
+            table.proxy.setBaseRowHeight(t.tileSize);
+            table.proxy.appendColumns(t.columnCount);
+            table.proxy.appendRows(t.rowCount);
+
+            for (var i = 0; i < t.columnCount; i++) {
+                for (var j = 0; j < t.rowCount; j++) {
+                    console.log("PlayingBoard.start creat tile - ", parameters, t);
+                    var tile = cardarion.presenter.presenters.TileCell.create();
+                    tile.proxy.setSize(t.tileSize);
+                    tile.proxy.setCoordinates(i,j);
+                    table.proxy.setContent(i, j, tile.view[0]);
+                }
+            }
+
+            t.mapPane.proxy.setContent(table.view[0]);
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        /*border: solid 1px black;*/
+        height: 100%;
+        /*overflow: scroll;*/
+        overflow: hidden;
+    }
+
+    .playingBoard {
+        width: 100%;
+    }
+/*
+    .playingBoardMiddle {
+        display: inline-block;
+        width: 100%;
+        border: solid 2px green;
+    }
+
+        .playingBoardMiddle > * {
+            float: left;
+        }
+
+    .playingBoardAbilities {
+        width: 200px;
+        border: solid 2px black;
+        height: 100%;
+        min-height: 200px;
+    }*/
+/*
+    .playingBoardTiles {
+        width: calc(100% - 220px);
+        margin-left: 10px;
+        border: solid 2px black;
+        min-height: 200px;
+        height: 100%;
+    }*/
+</style>
+
+

@@ -1,0 +1,156 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+
+<div class="endConditionsContainer">
+    <div class="winConditions endConditions">
+        <div class="winConditionsHeader endConditionsHeader">
+            <label>Win Conditions</label>
+        </div>
+        <div class="winConditionsBody winConditionsBody">
+            <div class="winCondition">
+                <label>Have 100 Points</label>
+            </div>
+            <div class="winCondition">
+                <label>Get 5 connected symbols.</label>
+            </div>
+        </div>
+    </div>
+    <div class="loseConditions endConditions">
+        <div class="loseConditionsHeader endConditionsHeader">
+            <label>Lose Conditions</label>
+        </div>
+        <div class="loseConditionsBody endConditionsBody">
+            <div class="loseCondition">
+                <label>Run out of cards</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="endConditionState">
+    <div class="pointsWinCondition">
+        <label>Points: </label>
+        <label h-handle="currentPoints"></label>
+    </div>
+    <div class="endConditionStateImages">
+        <div class="endConditionStateImage"><img h-graphic="Flame" /></div>
+        <label h-handle="currentPointsFire">2</label>
+        <div class="endConditionStateImage"><img h-graphic="Raindrop" /></div>
+        <label h-handle="currentPointsWater">3</label>
+        <div class="endConditionStateImage"><img h-graphic="Lightning" /></div>
+        <label h-handle="currentPointsElectricity">1</label>
+        <div class="endConditionStateImage"><img h-graphic="Tornado" /></div>
+        <label h-handle="currentPointsWind">44</label>
+        <div class="endConditionStateImage"><img h-graphic="Tree" /></div>
+        <label h-handle="currentPointsLife">2</label>
+        <div class="endConditionStateImage"><img h-graphic="Skull" /></div>
+        <label h-handle="currentPointsDeath">3</label>
+        <div class="endConditionStateImage"><img h-graphic="Star" /></div>
+        <label h-handle="currentPointsAstral">4</label>
+    </div>
+</div>
+
+
+<script>
+
+    function GameRules() {
+    }
+
+    GameRules.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("GameRules.start - ", parameters, t);
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+
+    .endConditionsContainer {
+        display: inline-block;
+        width: 100%;
+    }
+
+        .endConditionsContainer > * {
+            float: left;
+        }
+
+    .endConditions {
+        width: 40%;
+    }
+
+    .endConditionsHeader {
+        width: 100%;
+        text-align: center;
+    }
+
+    .endConditionsBody {
+        width: 100%;
+    }
+
+    .winConditions {
+    }
+
+    .endConditionState {
+        width: calc(100% - 20px);
+        border: solid 1px black;
+        display: inline-block;
+        padding: 10px;
+    }
+
+        .endConditionState > * {
+            float: left;
+        }
+
+    .endConditionStateImages {
+        display: inline-block;
+    }
+
+        .endConditionStateImages > * {
+            float: left;
+            margin-right: 10px;
+        }
+
+    .endConditionStateImage {
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        border: solid 2px black;
+        overflow: hidden;
+    }
+
+        .endConditionStateImage img {
+            width: 100%;
+        }
+
+    .endConditionStateImages > label {
+        margin-top: 4px;
+        font-size: 20px;
+    }
+
+    .pointsWinCondition {
+        margin-right: 30px;
+        font-size: 20px;
+        margin-top: 4px;
+    }
+</style>
+
+

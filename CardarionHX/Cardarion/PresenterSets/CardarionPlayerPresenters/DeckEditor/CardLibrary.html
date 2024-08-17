@@ -1,0 +1,93 @@
+﻿
+
+<hx h-publisher="CardClicked" />
+<hx h-proxy="setPage" />
+
+<div class="arrowContainer">
+    <div class="previousButton pageButton" h-handle="previousButton"><label>&larr;</label></div>
+    <div class="nextButton pageButton" h-handle="nextButton"><label>&rarr;</label></div>
+</div>
+<div class="pageContainer" h-handle="pageContainer"></div>
+
+
+<script>
+
+    function CardLibrary() {
+    }
+
+    CardLibrary.prototype = {
+
+        start: function () {
+            var t = this;
+
+            console.log("CardLibrary.start - PlayingCard", t);
+
+        },
+
+        setPage: function(page){
+            var t = this;
+
+            page.cards.forEach(card=>{
+                var playingCard = cardarion.presenter.presenters.PlayingCard.create();
+                playingCard.proxy.setName(card.name);
+                playingCard.publisher.Clicked.subscribe(()=>{
+
+            console.log("CardLibrary.setPage - Clicked", t);
+                    t.hularion.publisher.CardClicked.publish(playingCard);
+                });
+                t.pageContainer.append(playingCard.view);
+            });
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+
+    }
+
+    .arrowContainer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size:50px;
+        font-weight:bold;
+    }
+
+    .pageButton {
+        margin-left: 50px;
+        margin-right: 50px;
+        cursor:pointer;
+        border:solid 1px white;
+        border-radius: 5px;
+        padding-top:0;
+        padding-bottom:0;
+        padding-left:10px;
+        padding-right:10px;
+        overflow: hidden;
+    }
+    .pageButton * {
+        cursor: pointer;
+        margin-top: -5px;
+        padding: 0;
+        float:left;
+    }
+    .pageButton:hover{
+        background-color:darkgray;
+    }
+
+    .pageContainer{
+        display:inline-block;
+        padding:10px;
+    }
+    .pageContainer > *{
+        float:left;
+        margin-right:10px;
+        margin-bottom:10px;
+    }
+
+</style>
+
+

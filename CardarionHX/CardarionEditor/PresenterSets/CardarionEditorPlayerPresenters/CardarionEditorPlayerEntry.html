@@ -1,0 +1,69 @@
+﻿
+
+<hx h-presenter="cardarion.presenter/CardarionPlayer" h-handle="player" />
+
+<script>
+
+    function CardarionEditorPlayerEntry() {
+    }
+
+    CardarionEditorPlayerEntry.prototype = {
+
+        start: function () {
+            var t = this;
+
+            console.log("CardarionEditorPlayerEntry.start - ", t, communicator);
+
+            t.hularion.router.getRoutes().then(routes => {
+                console.log("CardarionEditorPlayerEntry.start routes - ", routes);
+            });
+
+            communicator.mesh.createItems().then(result => {
+                console.log("CardarionEditorPlayerEntry.start communicator.mesh.createItems - ", result);
+            });
+            communicator.mesh.deleteItems().then(result => {
+                console.log("CardarionEditorPlayerEntry.start communicator.mesh.deleteItems - ", result);
+            });
+            communicator.mesh.updateItems().then(result => {
+                console.log("CardarionEditorPlayerEntry.start communicator.mesh.updateItems - ", result);
+            });
+            communicator.mesh.getItems().then(result => {
+                console.log("CardarionEditorPlayerEntry.start communicator.mesh.getItems - ", result);
+            });
+            communicator.mesh.openRepository().then(result => {
+                console.log("CardarionEditorPlayerEntry.start communicator.mesh.openRepository - ", result);
+            });
+
+
+            var menu = t.player.proxy.getMenu();
+
+            var editor = { name: "Card Editor" };
+            menu.proxy.addLeftItem(editor);
+
+            menu.publisher.ItemSelected.subscribe((o, item) => {
+                if (item == editor) {
+                    var cardManager = cardarion.editor.presenters.CardEditManager.create();
+                    t.player.proxy.setViewInstance(cardManager);
+                }
+            });
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        user-select: none;
+    }
+
+        .this * {
+            user-select: none;
+        }
+
+    .titleBar {
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+

@@ -1,0 +1,20 @@
+﻿
+
+<hx h-hxpackage="true"
+    h-brand-name="CardarionEditor"
+    h-package-name="Cardarion Editor"
+    h-product-key="CardarionEditor"
+    h-package-key="CardarionEditor"
+    h-version="1.0.0">
+
+    <hx h-package-import="Cardarion@1.0.0=>Cardarion"  h-project="..\Cardarion"/>
+    <hx h-package-import="CardarionCore@1.0.0=>CardarionCore"  h-project="..\CardarionCore"/>
+
+    <hx h-package-import="CardarionDomeImport@1.0.0=>DomeImport" h-project="..\CardarionDomeImport"/>
+    <hx h-import-script="DomeImport" h-import-set="Import" h-frame="DOME"></hx>
+    <hx h-script-frame="DOME" h-dome-wrapper="e=>$(e);"></hx>
+
+	<hx h-server-router="CardarionMeshRepositoryRouter=>mesh" h-attach="frame" h-handle="communicator.mesh"/>
+
+
+</hx>

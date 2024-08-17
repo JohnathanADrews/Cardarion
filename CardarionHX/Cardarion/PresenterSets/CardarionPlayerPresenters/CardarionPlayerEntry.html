@@ -1,0 +1,40 @@
+﻿
+
+<hx h-presenter="cardarion.presenter/CardarionPlayer"/>
+
+<script>
+
+    function CardarionPlayerEntry() {
+    }
+
+    CardarionPlayerEntry.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+            
+            console.log("CardarionPlayerEntry.start - ", t, cardarion.control);
+
+
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        user-select: none;
+    }
+    .this * {
+        user-select: none;
+    }
+
+    .titleBar{
+        width: 100%;
+        text-align:center;
+    }
+
+
+</style>
+
+

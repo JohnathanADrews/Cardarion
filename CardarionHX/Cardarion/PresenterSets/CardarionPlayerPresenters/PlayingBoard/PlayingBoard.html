@@ -1,0 +1,113 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-publisher="Loaded" />
+<hx h-proxy="when" /> <!--Returns a promise for when the board is loaded. Loaded may be subscribed to after Loaded is fired.-->
+<hx h-proxy="getMiniMap" />
+
+<hx h-graphic="GameInstanceBackground=>handle/graphics.background" />
+
+<hx h-presenter="cardarion.control/MapPane" h-handle="mapPane" />
+
+<div h-clone="blankTile"></div>
+
+<script>
+
+    function PlayingBoard() {
+        /*Make minimap*/
+        this.columnCount = 21;
+        this.rowCount = 21;
+        this.tileSize = 100;
+        this.isLoaded = false;
+    }
+
+    PlayingBoard.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("PlayingBoard.start - ", parameters, t, algorithm);
+
+            var table = cardarion.control.presenters.Table.create();
+            table.view.css("background-image", "url('" + t.graphics.background + "')");
+            table.proxy.setBaseColumnWidth(t.tileSize);
+            table.proxy.setBaseRowHeight(t.tileSize);
+            table.proxy.appendColumns(t.columnCount);
+            table.proxy.appendRows(t.rowCount);
+
+            var midXTile = Math.floor(t.columnCount / 2);
+            var midYTile = Math.floor(t.rowCount / 2);
+
+            for (var i = 0; i < t.columnCount; i++) {
+                for (var j = 0; j < t.rowCount; j++) {
+                    var tile = null;
+                    if (i == midXTile && j == midYTile) {
+                    //if (j == Math.floor(t.columnCount / 2) || i == Math.floor(t.rowCount / 2)) {
+                        tile = cardarion.presenter.presenters.TileCell.create();
+                        tile.proxy.setCoordinates(i, j);
+                    }
+                    else {
+                        //tile = cardarion.presenter.presenters.TileCell.create();
+                        tile = cardarion.presenter.presenters.BlankTile.create();
+                    }
+                    //set down the base tile that is the initial connector.
+                    //if (i == midXTile && j == midYTile) {
+                    //    table.proxy.setContent(i, j, tile.view[0]);
+                    //}
+                    //else {
+                    //    table.proxy.setContent(i, j, t.hularion.createClone("blankTile"));
+                    //}
+                    tile.proxy.setSize(t.tileSize);
+                    table.proxy.setContent(i, j, tile.view[0]);
+                }
+            }
+
+            t.mapPane.proxy.setContent(table.view[0]);
+
+            setTimeout(() => {
+                t.mapPane.proxy.start();
+                t.mapPane.proxy.center();
+                t.miniMap = t.mapPane.proxy.createMiniMap(.1);
+                t.miniMap.proxy.center();
+                t.hularion.publisher.Loaded.publish();
+                t.isLoaded = true;
+            }, 0);
+
+        },
+
+        getMiniMap: function(){
+            return this.miniMap;
+        },
+
+        when: function(){
+            var t = this;
+            return algorithm.control.waitClimb(120000, 9999, ()=>t.isLoaded === true);
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        /*border: solid 1px black;*/
+        height: 100%;
+        /*overflow: scroll;*/
+        overflow: hidden;
+    }
+
+    .playingBoard {
+        width: 100%;
+    }
+</style>
+
+

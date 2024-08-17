@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardarionHX", "CardarionHX\CardarionHX.csproj", "{472CDAA8-2E18-4CB5-8C2A-475B470AFD73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HularionMesh", "..\Hularion\Hularion\HularionMesh\HularionMesh.csproj", "{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HularionMesh.Connector.Sqlite", "..\Hularion\Hularion\HularionMesh.Connector.Sqlite\HularionMesh.Connector.Sqlite.csproj", "{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{D1679A77-96F7-414C-AF5A-5771A37662AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardarionPlugin", "CardarionPlugin\CardarionPlugin.csproj", "{4A2F16A3-1C40-4E15-8C5E-31DB3A199EA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{472CDAA8-2E18-4CB5-8C2A-475B470AFD73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472CDAA8-2E18-4CB5-8C2A-475B470AFD73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472CDAA8-2E18-4CB5-8C2A-475B470AFD73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472CDAA8-2E18-4CB5-8C2A-475B470AFD73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2F16A3-1C40-4E15-8C5E-31DB3A199EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2F16A3-1C40-4E15-8C5E-31DB3A199EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2F16A3-1C40-4E15-8C5E-31DB3A199EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2F16A3-1C40-4E15-8C5E-31DB3A199EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{335EA26F-AA92-4B53-8A4D-4074EC2C1CA2} = {D1679A77-96F7-414C-AF5A-5771A37662AA}
+		{FEAAAE07-EAA4-4596-82E0-7EEA9EB2F5E1} = {D1679A77-96F7-414C-AF5A-5771A37662AA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAC9ABB7-887A-4660-AFE8-81293B100AD7}
+	EndGlobalSection
+EndGlobal

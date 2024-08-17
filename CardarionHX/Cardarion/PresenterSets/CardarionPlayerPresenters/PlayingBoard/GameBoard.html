@@ -1,0 +1,41 @@
+﻿
+
+
+<script>
+
+    function GameBoard() {
+        this.coordinates = null;
+    }
+
+    GameBoard.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("GameBoard.start - ", parameters, t);
+
+
+        },
+
+        setSize: function (size) {
+            var t = this;
+            t.hularion.principal.width(size);
+            t.hularion.principal.height(size);
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        overflow: hidden;
+    }
+    .this:hover{
+        background-color:aliceblue;
+    }
+    .this > *{
+    }
+</style>
+
+

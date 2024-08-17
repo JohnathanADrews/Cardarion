@@ -1,0 +1,98 @@
+﻿
+
+<hx h-publisher="CountChanged" />
+
+<hx h-proxy="setList" />
+<hx h-proxy="addCard" />
+<hx h-proxy="getCardCount" />
+
+<div class="listContainer" h-handle="list"></div>
+
+
+<script>
+
+    function DeckList() {
+        this.cardMap = new Map();
+        this.listMap = new Map();
+    }
+
+    DeckList.prototype = {
+
+        start: function () {
+            var t = this;
+
+            //console.log("DeckList.start - ", t);
+
+        },
+
+        setList: function (cards) {
+            var t = this;
+
+            t.list.empty();
+            var m = new Map();
+            t.listMap.clear();
+            cards.forEach(card => {
+                t.listCard(card);
+            });
+            t.hularion.publisher.CountChanged.publish({ count: t.getCardCount() });
+        },
+
+        addCard: function (card) {
+            var t = this;
+            if (t.listMap.has(card.name)) {
+                var item = t.listMap.get(card.name);
+                var cardItem = item.proxy.getItem();
+                cardItem.count++;
+                item.proxy.setItem(cardItem);
+                t.hularion.publisher.CountChanged.publish({ count: t.getCardCount()});
+            }
+            else {
+                var newCard = {
+                    name: card.name,
+                    count: 1
+                };
+                t.listCard(newCard);
+                t.hularion.publisher.CountChanged.publish({ count: t.getCardCount() });
+            }
+
+        },
+
+        listCard: function (card) {
+            var t = this;
+            var listItem = cardarion.presenter.presenters.DeckListItem.create();
+            listItem.proxy.setItem(card);
+            listItem.publisher.Removed.subscribe(() => {
+                t.listMap.delete(card.name);
+            });
+            listItem.publisher.CountChanged.subscribe(() => {
+                t.hularion.publisher.CountChanged.publish({ count: t.getCardCount() });
+            });
+            t.listMap.set(card.name, listItem);
+            t.list.append(listItem.view);
+        },
+
+        getCardCount: function () {
+            var t = this;
+            var count = 0;
+            t.listMap.forEach((v, k, m) => {
+                count += v.proxy.getItem().count;
+            });
+            return count;
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+    .listContainer {
+    }
+
+        .listContainer > * {
+            margin-bottom: 2px;
+        }
+</style>
+
+

@@ -1,0 +1,14 @@
+﻿
+<hx h-hxpackage="true"
+    h-package-name="Cardarion Core"
+    h-package-key="CardarionCore"
+    h-version="1.0.0">
+
+
+    <hx h-package-import="CardarionDomeImport@1.0.0=>DomeImport"  h-project="..\CardarionDomeImport"/>
+    <hx h-import-script="DomeImport" h-import-set="Import" h-frame="DOME"></hx>
+    <hx h-script-frame="DOME" h-dome-wrapper="e=>$(e);"></hx>
+
+</hx>
+
+

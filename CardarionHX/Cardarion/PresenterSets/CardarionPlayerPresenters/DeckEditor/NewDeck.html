@@ -1,0 +1,122 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-publisher="CreateDeck" />
+<hx h-publisher="Cancel" />
+
+<hx h-proxy="setMenu" />
+
+
+<hx h-publisher="Created" />
+<hx h-publisher="Cancelled" />
+
+<div class="newDeckHeader"><label>New Deck</label></div>
+<div class="newDeckContainer">
+    <hx h-presenter="cardarion.control/TextBox" h-handle="nameText" />
+</div>
+
+<!--<div class="buttons">
+    <hx h-presenter="cardarion.presenter/CardarionFormButton" h-handle="newButton" />
+    <hx h-presenter="cardarion.presenter/CardarionFormButton" h-handle="cancelButton" />
+</div>-->
+
+
+
+<script>
+
+    function NewDeck() {
+    }
+
+    NewDeck.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("NewDeck.start - ",  t);
+
+            t.nameText.proxy.setDefaultText("Click here to enter deck name.");
+
+            //t.newButton.proxy.setName("Create");
+            //t.newButton.publisher.Clicked.subscribe(() => {
+            //    t.hularion.publisher.Created.publish();
+            //});
+            //t.cancelButton.proxy.setName("Cancel");
+            //t.cancelButton.publisher.Clicked.subscribe(() => {
+            //    t.hularion.publisher.Cancelled.publish();
+            //});
+
+
+        },
+
+        setMenu: function (menu) {
+            var t = this;
+
+            menu.proxy.clearCenter();
+            var create = { name: "Create" };
+            var cancel = { name: "Cancel" };
+
+            menu.proxy.addCenterItem(create);
+            menu.proxy.addCenterItem(cancel);
+
+            menu.publisher.ItemSelected.subscribe((o, item) => {
+                if (item == create) {
+                    t.hularion.publisher.CreateDeck.publish(t.nameText.proxy.getText());
+                }
+                if (item == cancel) {
+
+                    console.log("NewDeck.setMenu Cancel - ", t, t.nameText.proxy.getText());
+                    t.hularion.publisher.Cancel.publish();
+                    //t.hularion.publisher.Cancel.publish(t.nameText.proxy.getText());
+                }
+            });
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+    .newDeckHeader {
+        text-align: center;
+        font-size: 40px;
+    }
+
+    .newDeckContainer {
+        /*border: solid 1px white;*/
+        font-size: 30px;
+        padding: 20px;
+    }
+
+        .newDeckContainer > * {
+            font-size: 30px;
+            width: calc(100% - 50px);
+            text-align: center;
+        }
+
+        .newDeckContainer input {
+            font-size: 30px;
+            width: calc(100% - 50px);
+        }
+
+    .buttons {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        /*background: linear-gradient(0deg, black 2%, rgb(50,50,50) 2%, rgb(70,70,70) 20%, rgb(120,120,120) 21%, rgb(70,70,70) 22%,  rgb(50,50,50) 100%);*/
+        padding: 20px;
+    }
+</style>
+
+

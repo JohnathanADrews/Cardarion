@@ -1,0 +1,229 @@
+﻿
+
+<hx h-proxy="setCardWidth" />
+
+<hx h-publisher="CardPreviewed" />
+<hx h-publisher="CardUnpreviewed" />
+<hx h-publisher="CardClicked" />
+
+<div class="playerHand" h-handle="handContainer">
+
+</div>
+<div h-template="playingCard" class="playingCard">
+    <!--<hx h-presenter="cardarion.control/DraggablePane" h-handle="cardDrag" />-->
+    <hx h-presenter="cardarion.presenter/PlayingCard" h-handle="card" />
+</div>
+
+<script>
+
+    function PlayerHand() {
+        this.promises = [];
+        this.hand = [];
+        this.cardWidth = 160;
+        this.handOffset = -280;
+        this.rowOffset = -26;
+        this.maxRowHand = 13;
+        this.maxHandAngle = 30;
+        this.cardOverlap = .7
+        this.cardWidth = 160;
+        this.cardHeight = 224;
+    }
+
+    PlayerHand.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("PlayerHand.start - ", parameters, t);
+
+            var cards = [];
+            algorithm.control.processIterator(0, 11, (i) => {
+                var card = t.hularion.createTemplate("playingCard");
+                cards.push(card);
+                card.handles.card.proxy.setName(i);
+                t.hand.push(card);
+            });
+
+            t.arrangeHand();
+        },
+
+        setCardWidth: function (width) {
+            this.cardWidth = width;
+        },
+
+        arrangeHand: function () {
+            var t = this;
+
+            var rowCount = Math.ceil(t.hand.length / t.maxRowHand);
+            var rowLength = Math.floor(t.hand.length / rowCount);
+            var extras = t.hand.length - (rowLength * rowCount);
+
+            var rows = [];
+            console.clear();
+            console.log("PlayerHand.arrangeHand - ", t, rowCount, rowLength, extras);
+            var cardIndex = 0;
+            for (var i = 0; i < rowCount; i++) {
+
+                var row = [];
+                var rl = rowLength;
+                var rowOffset = 0;
+                if (rowCount - i <= extras) {
+                    rl += 1;
+                }
+                else {
+                    rowOffset = (1 - t.cardOverlap) * t.cardWidth / 2;
+                }
+                for (var j = 0; j < rl; j++) {
+                    if (cardIndex >= t.hand.length) {
+                        continue;
+                    }
+                    row.push(t.hand[cardIndex]);
+                    t.hand[cardIndex].index = cardIndex;
+                    cardIndex++;
+                }
+                rows.push(row);
+                t.arrangeHandRow(row, rowOffset, t.handOffset + i * t.rowOffset, 2, t.cardOverlap, 100);
+            }
+            t.handContainer.empty();
+            algorithm.control.processReverseIterator(rows.length - 1, 0, (i) => {
+                var row = rows[i];
+                algorithm.control.processIterator(0, row.length - 1, (j) => {
+                    var card = row[j];
+                    t.handContainer.append(card.view);
+                });
+            });
+
+            //console.log("PlayerHand.handContainer  hand - ", t.hand);
+            algorithm.control.processIterator(0, t.hand.length - 1, (i) => {
+                var card = t.hand[i];
+                console.log("PlayerHand.handContainer  card - ", card);
+                var prev = card.view.prev();
+                card.view.on("mouseenter", () => {
+                    t.handContainer.append(card.view);
+                    card.view.css("border", "solid 4px gold");
+                    card.view.css("border-radius", "5px");
+
+                    var clone = card.handles.card.proxy.clone();
+                    t.hularion.publisher.CardPreviewed.publish({ card: clone });
+                });
+                card.view.on("mouseleave", () => {
+                    card.view.css("border", "none");
+                    card.view.css("border-radius", "0px;");
+                    console.log("PlayerHand.handContainer  prev - ", prev);
+                    if (prev == null || prev.length == 0) {
+                        t.handContainer.prepend(card.view);
+                    }
+                    else {
+                        card.view.insertAfter(prev);
+                    }
+                    var clone = card.handles.card.proxy.clone();
+                    t.hularion.publisher.CardUnpreviewed.publish({ card: clone });
+                });
+                card.view.on("click", () => {
+                    var clone = card.handles.card.proxy.clone();
+                    t.hularion.publisher.CardClicked.publish({ card: clone });
+                });
+            });
+
+        },
+
+        arrangeHandRow: function (cards, xPosition, yPosition, angle, overlap, maxDepth) {
+            var t = this;
+
+            console.log("PlayerHand.arrangeHandRow - ", cards, xPosition, yPosition, angle, overlap, maxDepth);
+
+            if (cards == null || cards.length == 0) {
+                return;
+            }
+
+            var baseAngleRadians = angle / 180 * Math.PI;
+
+            var positions = [];
+            var tops = [];
+            var transforms = [];
+            var eccentricities = [];
+
+            for (var i = 0; i < cards.length; i++) {
+                positions.push(i * (t.cardWidth + 10));
+                tops.push(-280);
+                transforms.push(null);
+                eccentricities.push(0);
+            }
+            var even = 0;
+            if (cards.length % 2 == 0) {
+                even = 1;
+            }
+            var middle = Math.floor(cards.length / 2);
+            for (var j = 0; j < middle - even; j++) {
+                eccentricities[j] = j - middle + even;
+            }
+            for (var j = middle + 1; j < cards.length; j++) {
+                eccentricities[j] = j - middle;
+            }
+
+
+            var overlapWidth = t.cardWidth * (1 - overlap);
+
+            for (var i = 0; i < cards.length; i++) {
+
+                var card = cards[i];
+                var eccentricity = eccentricities[i];
+                transforms[i] = "rotate3d(0,0,1, " + (angle * eccentricity) + "deg)";
+                xPosition += t.cardWidth * (1 - overlap);
+                positions[i] = xPosition;
+                yPosition += overlapWidth * Math.sin(baseAngleRadians * eccentricity);
+                tops[i] = yPosition;
+            }
+
+
+            for (var i = 0; i < cards.length; i++) {
+
+                var card = cards[i];
+                var eccentricity = eccentricities[i];
+
+                card.view.css("top", tops[i]);
+                card.view.css("left", positions[i]);
+                card.view.css("transform", transforms[i]);
+                card.view.attr("title", card.index + " " + positions[i] + " " + tops[i]);
+
+                //console.log("PlayerHand.arrangeHandRow card - ", { "eccentricity": eccentricity[i], "position": positions[i], "transform": transforms[i] });
+
+            }
+
+            //console.log("PlayerHand.arrangeHandRow - ", middle, { "cards": cards, "eccentricities": eccentricities, "positions": positions, "transforms": transforms });
+            
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        height: 10px;
+        /*overflow: hidden;*/
+    }
+    .playerHand {
+        display: inline-block;
+        width: 100%;
+    }
+    .playerHand > * {
+        position:absolute;
+        /*margin-top:-300px;
+        margin-right:20px;*/
+    }
+/*
+    .playerHand{
+        display:inline-block;
+    }
+    .playerHand > *{
+        float:left;
+        margin-right:10px;
+    }
+    .handContainer{
+        height:inherit;
+        border:solid 1px red;
+    }*/
+</style>
+
+

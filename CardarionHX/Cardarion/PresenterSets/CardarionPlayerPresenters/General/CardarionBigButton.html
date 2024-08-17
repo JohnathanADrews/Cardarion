@@ -1,0 +1,70 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-publisher="Clicked" />
+<hx h-proxy="setName" />
+
+<div h-handle="button"><label h-handle="name"></label></div>
+
+<script>
+
+    function CardarionBigButton() {
+    }
+
+    CardarionBigButton.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            t.hularion.principal.on("click", () => {
+                t.hularion.publisher.Clicked.publish(t.hularion.proxy);
+            });
+        },
+
+        setName: function (name) {
+            this.name.html(name);
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        border: solid 1px lightgray;
+        border-radius: 5px;
+        cursor: pointer;
+        height: 110px;
+        width: 110px;
+        margin-top: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        background-color: rgb(70,70,70);
+        padding: 10px;
+    }
+
+    .this * {
+        cursor: pointer;
+    }
+
+    .this > * {
+        height: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+

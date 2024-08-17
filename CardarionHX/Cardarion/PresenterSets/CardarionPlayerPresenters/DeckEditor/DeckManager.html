@@ -1,0 +1,104 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-proxy="setMenu" />
+
+<div class="editorContainer" h-handle="editorContainer"></div>
+
+
+
+<script>
+
+    function DeckManager() {
+        this.menu = null;
+    }
+
+    DeckManager.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("DeckManager.start - ", parameters, t);
+
+        },
+
+        setMenu: function (menu) {
+            var t = this;
+            console.log("DeckManager.setMenu - ", t);
+            t.menu = menu;
+            menu.proxy.clearCenter();
+            var newDeckItem = { name: "New Deck" };
+            var editDeckItem = { name: "Edit Deck" };
+            menu.proxy.addCenterItem(newDeckItem);
+            menu.proxy.addCenterItem(editDeckItem);
+            menu.publisher.ItemSelected.subscribe((o, item) => {
+                if (item == newDeckItem) {
+                    var newDeck = cardarion.presenter.presenters.NewDeck.create();
+                    newDeck.view.css("padding", "20px");
+                    newDeck.proxy.setMenu(menu);
+                    t.editorContainer.empty();
+                    newDeck.publisher.CreateDeck.subscribe((o, name) => {
+                        t.refresh();
+                    });
+                    newDeck.publisher.Cancel.subscribe(() => {
+                        t.refresh();
+                    });
+                    t.editorContainer.append(newDeck.view);
+                }
+                if (item == editDeckItem) {
+                    var deckSelector = deckSelector = cardarion.presenter.presenters.DeckSelector.create();
+                    deckSelector.view.css("padding", "20px");
+                    deckSelector.proxy.setMenu(menu);
+                    deckSelector.publisher.Cancel.subscribe(() => {
+                        t.refresh();
+                    });
+                    deckSelector.publisher.DeckSelected.subscribe((o, deck) => {
+                        //console.log("DeckManager.setMenu1 - ", t);
+                        var deckEditor = cardarion.presenter.presenters.DeckEditor.create();
+                        deckEditor.proxy.setDeck(deck);
+                        deckEditor.proxy.setMenu(menu);
+                        deckEditor.publisher.Cancel.subscribe(() => {
+                            t.refresh();
+                        });
+                        deckEditor.publisher.Save.subscribe((o, deck) => {
+                            t.refresh();
+                        });
+                        t.editorContainer.empty();
+                        t.editorContainer.append(deckEditor.view);
+                    });
+                    t.editorContainer.empty();
+                    t.editorContainer.append(deckSelector.view);
+                }
+            });
+
+        },
+
+        refresh: function () {
+            var t = this;
+            t.editorContainer.empty();
+            t.setMenu(t.menu);
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+    .editorContainer{
+        background-color: rgb(70,70,70);
+    }
+</style>
+
+

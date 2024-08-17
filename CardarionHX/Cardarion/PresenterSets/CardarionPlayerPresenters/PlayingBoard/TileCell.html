@@ -1,0 +1,171 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+
+<hx h-proxy="setSize"/>
+<hx h-proxy="setCoordinates"/>
+
+<div class="container" h-handle="container">
+    <!--<div class="corner" h-handle="ltCorner"></div>-->
+    <div class="top cellItem" h-handle="top">
+        <div class="vertical" h-handle="topHorizontal"></div>
+    </div>
+    <!--<div class="corner" h-handle="rtCorner"></div>-->
+
+    <div class="left cellItem" h-handle="left">
+        <div class="vertical" h-handle="leftVertical"></div>
+    </div>
+    <div class="right cellItem" h-handle="right">
+        <div class="vertical" h-handle="rightVertical"></div>
+    </div>
+    <!--<div class="corner" h-handle="lbCorner"></div>-->
+    <div class="bottom cellItem" h-handle="bottom">
+        <div class="vertical" h-handle="bottomHorizontal"></div>
+    </div>
+    <!--<div class="corner" h-handle="rbCorner"></div>-->
+    <div class="center cellItem" h-handle="center">
+        <div class="centerContent" h-handle="centerContent"></div>
+    </div>
+</div>
+
+<script>
+
+    function TileCell() {
+        this.coordinates = null;
+    }
+
+    TileCell.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("TileCell.start - ", parameters, t);
+
+            t.setSize(80);
+
+        },
+
+        setSize: function (size) {
+            var t = this;
+            t.hularion.principal.width(size);
+            t.hularion.principal.height(size);
+
+            var modified = size - 2;
+            var quarter = Math.floor(modified / 4);
+            var middle = modified - 2 * quarter;
+
+
+            t.container.width(modified);
+            t.container.height(modified);
+
+
+            t.top.width(modified);
+            t.top.height(modified);
+
+            t.left.width(modified);
+            t.left.height(modified);
+            t.left.css("top", (-1 * modified) + "px");
+
+            t.right.width(modified);
+            t.right.height(modified);
+            t.right.css("top", (-2 * modified) + "px");
+
+            t.bottom.width(modified);
+            t.bottom.height(modified);
+            t.bottom.css("top", (-3 * modified) + "px");
+
+            t.center.width(modified);
+            t.center.height(modified);
+            t.center.css("top", (-4 * modified) + "px");
+
+            t.centerContent.width(middle);
+            t.centerContent.height(middle);
+            t.center.css("margin-top", quarter + "px");
+
+            //t.left.width(third);
+            //t.left.height(third);
+
+            //t.right.width(third);
+            //t.right.height(middle);
+
+            //t.top.width(middle);
+            //t.top.height(third);
+
+            //t.bottom.width(middle);
+            //t.bottom.height(third);
+
+            //t.center.width(middle);
+            //t.center.height(middle);
+
+            //t.ltCorner.width(third);
+            //t.ltCorner.height(third);
+
+            //t.rtCorner.width(third);
+            //t.rtCorner.height(third);
+
+            //t.lbCorner.width(third);
+            //t.lbCorner.height(third);
+
+            //t.rbCorner.width(third);
+            //t.rbCorner.height(third);
+        },
+
+        setCoordinates: function (x, y) {
+            var t = this;
+            t.coordinates = { x: x, y: y };
+
+            t.centerContent.html(x+", "+y);
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        overflow: hidden;
+    }
+    .this > *{
+    }
+    .container { /*
+        display:inline-block;
+        width:9999px;*/
+        border: solid 1px lightgray;
+    }
+    .container > * {
+        /*float:left;*/
+    }
+    .cellItem {
+        position: relative;
+    }
+    .corner{
+        background-color:green;
+    }
+
+    .center {
+        width: 100%;
+    }
+    .centerContent {
+        /*border: solid 1px lightblue;*/
+        background-color: lightgray;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .left {
+        background: linear-gradient(45deg, transparent 0%, transparent 49.9%, lightgray 49.9%, lightgray 50.1%, transparent 50.1%, transparent 100%);
+    }
+    .right {
+        background: linear-gradient(135deg, transparent 0%, transparent 49.9%, lightgray 49.9%, lightgray 50.1%, transparent 50.1%, transparent 100%);
+    }
+</style>
+
+

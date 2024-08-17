@@ -1,0 +1,211 @@
+﻿
+<!--<hx h-publisher="Clicked" />
+<hx h-proxy="setHeight" />-->
+
+
+<div class="column inheritHeight">
+    <div class="row boardContainer inheritHeight">
+
+        <div class="playingBoardContainer inheritHeight">
+            <hx h-presenter="cardarion.presenter/PlayingBoard" h-handle="playingBoard" />
+        </div>
+    </div>
+</div>
+
+<!--<div class="row opponentHandContainer  inheritHeight" style="display:none;">
+    <hx h-presenter="cardarion.presenter/OpponentHand" h-handle="opponentHand" />
+</div>-->
+<div class="row ">
+    <!--<div class="column statusContainer" style="display:none;">
+        <div class="playerStatusContainer">-->
+    <!--<hx h-presenter="cardarion.presenter/ParticipantStatus" h-handle="playerStatus" />-->
+    <!--<hx h-presenter="cardarion.presenter/AbilityBoard" h-handle="abilityBoard" />
+        </div>
+    </div>-->
+    <!--<div class="column statusContainer" style="display:none;">
+        <div class="opponentStatusContainer">-->
+    <!--<hx h-presenter="cardarion.presenter/ParticipantStatus" h-handle="opponentStatus" />-->
+    <!--<hx h-presenter="cardarion.presenter/AbilityBoard" h-handle="abilityBoard" />
+        </div>
+    </div>-->
+</div>
+<div class="playerHandContainer">
+    <hx h-presenter="cardarion.presenter/PlayerHand" h-handle="playerHand" />
+</div>
+
+<div class="selectedCardContainer" h-handle="selectedCardContainer">
+    <hx h-presenter="cardarion.presenter/ActiveCard" h-handle="activeCard" />
+</div>
+
+
+<div h-handle="miniMapContainer" class="miniMapContainer"></div>
+
+<script>
+
+    function GameInstance() {
+        this.miniMap = null;
+        this.cardIsActive = false;
+    }
+
+    GameInstance.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            console.log("GameInstance.start - ", parameters, t);
+
+            t.activeCard.publisher.CardClosed.subscribe((o, e) => {
+                t.cardIsActive = false;
+                t.hideActiveCard();
+            });
+            t.activeCard.publisher.DragDelta.subscribe((o, e) => {
+                console.log("GameInstance.start - t.activeCard.publisher.DragDelta - ", e, t.selectedCardContainer[0].style);
+                //console.log("GameInstance.start - ", t.activeCard.publisher.DragDelta, e, (parseInt(t.selectedCardContainer[0].style.top) + e.dy) + "px");
+                t.selectedCardContainer[0].style.top += (parseInt(t.selectedCardContainer[0].style.top) + e.dy) + "px";
+                //t.selectedCardContainer[0].style.left += e.dx;
+            });
+
+            t.playingBoard.proxy.when().then(() => {
+                t.miniMap = t.playingBoard.proxy.getMiniMap();
+                t.miniMapContainer.append(t.miniMap.view);
+
+
+                //const tempDiv = document.createElement("div");
+                //tempDiv.innerHTML = t.miniMap.dome.outerHTML;
+
+                //var canvas = document.createElement("canvas");
+                //canvas.width = tempDiv.offsetWidth;
+                //canvas.height = tempDiv.offsetHeight;
+                //var context = canvas.getContext("2d");
+                //context.drawImage(tempDiv, 0, 0);
+
+                //t.miniMap.proxy.setBackgroundImage(canvas.toDataURL("image/png"));
+            });
+
+            t.playerHand.publisher.CardPreviewed.subscribe((o, e) => {
+                //console.log("GameInstance.start playerHand CardPreviewed - ", o, e);
+                t.showActiveCard(e.card);
+            });
+
+            t.playerHand.publisher.CardUnpreviewed.subscribe((o, e) => {
+                //console.log("GameInstance.start playerHand CardUnpreviewed - ", o, e);
+                t.hideActiveCard();
+            });
+
+            t.playerHand.publisher.CardClicked.subscribe((o, e) => {
+                //console.log("GameInstance.start playerHand CardClicked - ", o, e);
+                t.cardIsActive = false;
+                t.showActiveCard(e.card);
+                t.cardIsActive = true;
+            });
+
+
+        },
+
+        hideActiveCard: function () {
+            var t = this;
+            if (t.cardIsActive === true) {
+                return;
+            }
+            t.selectedCardContainer.css("display", "none");
+        },
+
+        showActiveCard: function (card) {
+            var t = this;
+            if (t.cardIsActive === true) {
+                return;
+            }
+            t.activeCard.proxy.setCard(card);
+            t.selectedCardContainer.css("display", "block");
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+        background: linear-gradient(135deg, black 0%, rgb(200,200,200) 50%, black 80%, rgb(120,120,120) 90%, black 100%);
+        display: inline-block;
+        overflow: hidden;
+        height: inherit;
+        width: calc(100vw - 0px);
+        overflow: hidden;
+    }
+
+    .inheritHeight {
+        height: inherit;
+    }
+
+    .column {
+        display: inline-block;
+    }
+
+        .column > * {
+            float: left;
+        }
+
+    .boardContainer {
+        /*height: inherit;*/
+        /*height: calc(100vh - 400px);*/
+        /*height: calc(100vh - 220px);*/
+        /*height: calc(100vh - 10px);*/
+        width: calc(100vw - 0px);
+        display: inline-block;
+    }
+
+        .boardContainer > * {
+            float: left;
+        }
+
+    .playerHandContainer {
+        width:calc(100vw - 60px);
+        /*height: 10px;*/
+        position: absolute;
+        left: calc(20px);
+        top: calc(100vh - 20px);
+        /*border:solid 1px gray;*/
+    }
+
+    .opponentHandContainer {
+        height: 180px;
+        overflow: hidden;
+    }
+
+    .playingBoardContainer {
+        /*width: calc(100vw - 350px);*/
+        width: inherit;
+        height: inherit;
+    }
+
+    .statusContainer {
+        width: 160px;
+    }
+
+    .playerStatusContainer {
+        background: linear-gradient(120deg, rgb(100,100,255) 0%, white 30%, white 70%, rgb(0,0,255) 100%);
+    }
+
+    .opponentStatusContainer {
+        background: linear-gradient(-120deg, rgb(255,100,100) 0%, white 30%, white 70%, rgb(255,0,0) 100%);
+    }
+
+
+    .miniMapContainer {
+        position: absolute;
+        left: calc(100vw - 300px);
+        top: calc( 20px);
+        border:solid 2px rgb(50,50,50);
+        border-radius:2px;
+        background-color: rgba(255,255,255,.2);
+    }
+
+    .selectedCardContainer {
+        position: absolute;
+        left: calc(100px);
+        top: calc( 20px);
+        display:none;
+    }
+
+</style>
+
+

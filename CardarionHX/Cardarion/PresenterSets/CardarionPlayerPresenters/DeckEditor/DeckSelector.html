@@ -1,0 +1,127 @@
+﻿<!--
+MIT License
+
+Copyright (c) 2023 Johnathan A Drews
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-->
+<!--<hx h-publisher="Clicked" />
+<hx h-proxy="setHeight" />-->
+
+<hx h-publisher="Cancel" />
+<hx h-publisher="DeckSelected" />
+
+<hx h-proxy="setMenu" />
+
+<!--<hx h-presenter="cardarion.control/Table" h-handle="decksTable" />-->
+
+<div class="decks" h-handle="decksContainer"></div>
+
+<div h-clone="deck" class="deck">
+    <div class="deckContent" h-handle="deckContent">
+        <label h-handle="name"></label>
+    </div>
+</div>
+<div h-clone="nodeck" class="nodeck"></div>
+
+<script>
+
+    function DeckSelector() {
+        this.decks = [
+            { name: "Deck1", cards: [{ name: "c1", count: 2 }, { name: "c2", count: 21 }, { name: "c3", count: 3 }] },
+            { name: "Deck2", cards: [] },
+            { name: "Deck3", cards: [] },
+            { name: "Deck4", cards: [] },
+            { name: "Deck5", cards: [] },
+            { name: "Deck6", cards: [] },
+            { name: "Deck7", cards: [] },
+            { name: "Deck8", cards: [] },
+            { name: "Deck9", cards: [] },
+            { name: "Deck10", cards: [] }
+        ];
+    }
+
+    DeckSelector.prototype = {
+
+        start: function (parameters) {
+            var t = this;
+
+            //console.log("DeckSelector.start - ",  t);
+
+            //on resize or api callback do this.
+            t.setupDeckDisplay();
+        },
+
+
+        setMenu: function (menu) {
+            var t = this;
+
+            menu.proxy.clearCenter();
+            var cancel = { name: "Cancel" };
+            menu.proxy.addCenterItem(cancel);
+            menu.publisher.ItemSelected.subscribe((o, item) => {
+                if (item == cancel) {
+                    t.hularion.publisher.Cancel.publish();
+                }
+            });
+        },
+
+        setupDeckDisplay: function () {
+            var t = this;
+
+            t.decksContainer.width(800);
+
+            t.decks.forEach(deck => {
+                var clone = t.hularion.createClone("deck");
+                clone.view.width(150);
+                clone.view.height(150);
+                clone.handles.deckContent.width(130);
+                clone.handles.deckContent.height(130);
+                clone.handles.name.html(deck.name);
+                clone.view.on("click", () => {
+                    t.hularion.publisher.DeckSelected.publish(deck);
+                })
+                t.decksContainer.append(clone.view);
+            });
+
+        }
+    }
+
+</script>
+<style>
+
+    .this {
+    }
+
+    .decks {
+        display: inline-block;
+        overflow-y: scroll;
+        border: solid 1px white;
+    }
+
+        .decks > * {
+            float: left;
+        }
+
+    .deck {
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .deckContent {
+        background-color: green;
+        cursor:pointer;
+    }
+        .deckContent * {
+            cursor: pointer;
+        }
+</style>
+
+
