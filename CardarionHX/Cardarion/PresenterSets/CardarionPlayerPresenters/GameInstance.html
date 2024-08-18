@@ -33,7 +33,7 @@
     <hx h-presenter="cardarion.presenter/PlayerHand" h-handle="playerHand" />
 </div>
 
-<div class="selectedCardContainer" h-handle="selectedCardContainer">
+<div class="selectedCardContainer" h-handle="selectedCardContainer" style="left:100px;top:-100px;">
     <hx h-presenter="cardarion.presenter/ActiveCard" h-handle="activeCard" />
 </div>
 
@@ -201,8 +201,6 @@
 
     .selectedCardContainer {
         position: absolute;
-        left: calc(100px);
-        top: calc( 20px);
         display:none;
     }
 

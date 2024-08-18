@@ -37,6 +37,7 @@
 
             t.cardLibrary.publisher.CardClicked.subscribe((o, card) => {
                 var editor = cardarion.editor.presenters.CardEditor.create();
+                console.log("CardEditManager.start - cardLibrary.publisher.CardClicked - ", o, card, editor);
                 editor.proxy.setCard(card);
                 editor.publisher.EditPreview.subscribe((o, preview) => {
                     t.previewCard.proxy.setCardObject(preview);

@@ -65,10 +65,12 @@
         setCardObject: function (card) {
             var t = this;
             t.card = card;
+            //console.log("PlayingCard.setCardObject- ", t, card);
             t.name.html(card.name);
         },
 
         getCardObject: function () {
+            var t = this;
             return t.card;
         },
 
